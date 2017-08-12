@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Api\V1;
 
 use Cms\Modules\Auth\Repositories\User\RepositoryInterface as UserRepo;
@@ -21,7 +20,6 @@ class WidgetController extends BaseApiController
             ->where('created_at', sprintf('%d-%02d-%02d 00:00:00', date('Y'), date('m'), date('d')), '>=')
             ->where('created_at', sprintf('%d-%02d-%02d 23:59:59', date('Y'), date('m'), date('d')), '<')
             ->count();
-
         return $this->sendResponse('ok', 200, [
             'user_count' => $count,
         ]);
@@ -33,12 +31,10 @@ class WidgetController extends BaseApiController
         if ($userCount <= 0) {
             $userCount = 8;
         }
-
         $users = $userRepo->orderBy('created_at', 'desc')->limit($userCount)->get();
         $users = $users->transform(function ($model) {
             return $model->transform();
         });
-
         return $this->sendResponse('ok', 200, [
             'users' => $users,
         ]);

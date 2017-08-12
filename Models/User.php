@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Models;
 
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -41,13 +40,13 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
      */
     public function roles()
     {
-        return $this->belongsToMany(__NAMESPACE__.'\Role', 'auth_roleables', 'caller_id', 'role_id')
+        return $this->belongsToMany(__NAMESPACE__ . '\Role', 'auth_roleables', 'caller_id', 'role_id')
             ->where('caller_type', $this->getCallerType());
     }
 
     public function permissions()
     {
-        return $this->belongsToMany(__NAMESPACE__.'\Permission', 'auth_permissionables', 'caller_id', 'role_id')
+        return $this->belongsToMany(__NAMESPACE__ . '\Permission', 'auth_permissionables', 'caller_id', 'role_id')
             ->where('caller_type', $this->getCallerType());
     }
 
@@ -60,12 +59,10 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
         if (($setting = config('cms.auth.config.users.force_screenname', 'NULL')) !== 'NULL') {
             $this->use_nick = $setting;
         }
-
         // this usually happens if social login was how they registered
         if (empty($this->username)) {
             return $this->name;
         }
-
         // switch as needed
         return $this->use_nick == 1 ? $this->name : $this->username;
     }
@@ -87,7 +84,6 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
         if (empty($val) || $val === 'gravatar') {
             return $this->gravatar($size);
         }
-
         return $this->urlAvatar();
     }
 
@@ -98,7 +94,7 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
 
     public function getUploadDirAttribute()
     {
-        return 'uploads/'.sha1($this->id);
+        return 'uploads/' . sha1($this->id);
     }
 
     /**
@@ -107,25 +103,21 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
     public function getAvatarList()
     {
         $avatars = [];
-
         // gravatar
         $avatars['gravatar'] = $this->gravatar('64');
-
         // socials
         if (app('modules')->has('Social') && app('modules')->get('Social')->enabled()) {
             foreach ($this->providers()->get() as $provider) {
                 $avatars[$provider->provider] = $provider->avatar;
             }
         }
-
         // uploadables
         $avatarDir = \File::files($this->uploadDir);
         if (!empty($avatarDir)) {
             foreach ($avatarDir as $id => $avatar) {
-                $avatars['Upload '.($id + 1)] = '/'.$avatar;
+                $avatars['Upload ' . ($id + 1)] = '/' . $avatar;
             }
         }
-
         return $avatars;
     }
 
@@ -145,16 +137,13 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
 
     public function verify($code)
     {
-        if ($this->usercode === md5($this->id.$code)) {
+        if ($this->usercode === md5($this->id . $code)) {
             $this->verified = 1;
-
             if ($this->save()) {
                 return true;
             }
-
             throw new \RuntimeException(Lang::get('auth::verify.failed'));
         }
-
         return false;
     }
 
@@ -175,20 +164,16 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
         } else {
             $roles = func_get_args();
         }
-
         if (empty($roles)) {
             return false;
         }
-
         $return = true;
         foreach ($roles as $role) {
             $hasRole = in_array($role, $this->getCallerRoles());
-
             if ($hasRole === false) {
                 $return = false;
             }
         }
-
         return $return;
     }
 
@@ -216,31 +201,25 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
     public function transform()
     {
         $return = [
-            'id' => (int) $this->id,
-            'username' => (string) $this->username,
-            'screenname' => (string) $this->screenname,
-            'name' => (string) $this->name,
-
+            'id' => (int)$this->id,
+            'username' => (string)$this->username,
+            'screenname' => (string)$this->screenname,
+            'name' => (string)$this->name,
             'links' => [
-                'self' => (string) $this->makeLink(true),
-                'html' => (string) $this->screenname, #$this->makeLink(false),
+                'self' => (string)$this->makeLink(true),
+                'html' => (string)$this->screenname, #$this->makeLink(false),
             ],
-
-            'email' => (string) $this->email,
-            'avatar' => (string) $this->avatar,
-
+            'email' => (string)$this->email,
+            'avatar' => (string)$this->avatar,
             'require2fa' => $this->require2fa,
             'last_logged_at' => date_array($this->last_logged_at),
             'verified' => date_array($this->verified_at),
             'registered' => date_array($this->created_at),
-
             'roles' => [],
         ];
-
         if ($this->roles !== null) {
             $return['roles'] = $this->getCallerRoles();
         }
-
         return $return;
     }
 
@@ -251,7 +230,6 @@ class User extends BaseModel implements Caller, AuthenticatableContract, CanRese
         } catch (BadMethodCallException $e) {
             //
         }
-
         return parent::__call($method, $args);
     }
 }

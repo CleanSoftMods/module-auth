@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Composers;
 
 use Illuminate\Contracts\View\View;
@@ -19,22 +18,18 @@ class Recaptcha
     public function loginForm(View $view)
     {
         $setting = config('cms.auth.config.recaptcha.login_form', 'false');
-
         if ($this->recaptcha_enabled === 'false') {
             $setting = 'false';
         }
-
         $view->with('showRecaptcha', $setting === 'true' ? true : false);
     }
 
     public function registerForm(View $view)
     {
         $setting = config('cms.auth.config.recaptcha.register_form', 'false');
-
         if ($this->recaptcha_enabled === 'false') {
             $setting = 'false';
         }
-
         $view->with('showRecaptcha', $setting === 'true' ? true : false);
     }
 }

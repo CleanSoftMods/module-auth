@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Console;
 
 use Illuminate\Console\Scheduling\Schedule;

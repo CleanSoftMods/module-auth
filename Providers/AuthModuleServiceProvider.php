@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Providers;
 
 use Cms\Modules\Core\Providers\BaseModuleProvider;
@@ -48,12 +47,10 @@ class AuthModuleServiceProvider extends BaseModuleProvider
     public function register()
     {
         parent::register();
-
         // override some config settings
         $userModel = 'Cms\Modules\Auth\Models\User';
         config(['cms.auth.config.user_model' => $userModel]);
         config(['auth.table' => with(new $userModel())->getTable()]);
-
         // attach view composer to the login & register form
         view()->composer('theme.*::views.partials.core._login_form', 'Cms\Modules\Auth\Composers\Recaptcha@loginForm');
         view()->composer('theme.*::views.partials.core._register_form', 'Cms\Modules\Auth\Composers\Recaptcha@registerForm');

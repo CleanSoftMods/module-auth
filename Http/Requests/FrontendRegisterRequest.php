@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Requests;
 
 use Cms\Http\Requests\Request;
@@ -26,24 +25,20 @@ class FrontendRegisterRequest extends Request
     {
         $tblPrefix = config('cms.auth.table-prefix', 'auth_');
         $usernameValidation = config('cms.auth.config.users.username_validator', '\w+');
-
         // set basic rules up
         $rules = [
-            'username' => 'required|max:255|unique:'.$tblPrefix.'users|regex:/^'.$usernameValidation.'$/',
-            'email' => 'required|email|max:255|unique:'.$tblPrefix.'users',
+            'username' => 'required|max:255|unique:' . $tblPrefix . 'users|regex:/^' . $usernameValidation . '$/',
+            'email' => 'required|email|max:255|unique:' . $tblPrefix . 'users',
             'password' => 'required|confirmed|min:8',
         ];
-
         // if we wanted secure passwords...
         if (config('cms.auth.users.login.force_password', 'false') === 'true') {
             $rules['password'] .= '|regex:^(?=\d*)(?=[a-z]*)(?=[A-Z]*)(?=[\W]*).{8,}';
         }
-
         // if we wanted it there, enforce it
         if ($this->needRecaptcha()) {
             $rules['g-recaptcha-response'] = 'required|recaptcha';
         }
-
         return $rules;
     }
 
@@ -51,13 +46,11 @@ class FrontendRegisterRequest extends Request
     {
         // test for recaptcha
         $setting = config('cms.auth.config.recaptcha.login_form', 'false');
-
         if (in_array(null, [
-                config('recaptcha.public_key', null),
-                config('recaptcha.private_key', null), ])) {
+            config('recaptcha.public_key', null),
+            config('recaptcha.private_key', null),])) {
             $setting = 'false';
         }
-
         return $setting === 'true';
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Auth\Datatables;
-
 class PermissionManager
 {
     public function boot()
@@ -21,7 +19,6 @@ class PermissionManager
                 //     ],
                 // ],
             ],
-
             /*
              * Set up some table options, these will be passed back to the view
              */
@@ -34,11 +31,9 @@ class PermissionManager
                 'source' => 'admin.permission.manager',
                 'collection' => function () {
                     $model = 'Cms\Modules\Auth\Models\Permission';
-
                     return $model::with('roles')->get();
                 },
             ],
-
             /*
              * Lists the tables columns
              */
@@ -104,12 +99,10 @@ class PermissionManager
                     'th' => 'Roles',
                     'tr' => function ($model) {
                         $roles = null;
-
                         $tpl = '<span class="label label-default" style="background-color: %s;">%s</span>&nbsp;';
                         foreach ($model->roles as $role) {
                             $roles .= sprintf($tpl, $role->color, $role->name);
                         }
-
                         return $roles;
                     },
                     'filtering' => true,
@@ -119,7 +112,6 @@ class PermissionManager
                     'th' => 'Actions',
                     'tr' => function ($model) {
                         return [];
-
                         return [
                             [
                                 'btn-title' => 'View',

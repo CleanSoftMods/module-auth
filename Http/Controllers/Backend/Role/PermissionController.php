@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Backend\Role;
 
 use Cms\Modules\Auth\Models\Permission;
@@ -13,16 +12,13 @@ class PermissionController extends BaseRoleController
     public function getForm(Role $role)
     {
         $data = $this->getRoleDetails($role);
-
         $permissions = Permission::orderBy('resource_type', 'asc')->get();
-
         $groups = [];
         $modulePermissions = get_array_column(config('cms'), 'admin.permission_manage');
         foreach ($modulePermissions as $permission_groups) {
             $groups = array_merge($groups, $permission_groups);
         }
         $groups = array_unique($groups);
-
         return $this->setView('admin.role.permissions', compact('role', 'permissions', 'groups'));
     }
 
@@ -31,34 +27,28 @@ class PermissionController extends BaseRoleController
         $lock = $lockManager->role($role->name);
         foreach ($input->get('permissions') as $permission => $mode) {
             list($permission, $resource) = processPermission($permission);
-
             switch (strtolower($mode)) {
                 case 'privilege':
                     $lock->allow($permission, $resource);
-                break;
-
+                    break;
                 case 'restriction':
                     $lock->deny($permission, $resource);
-                break;
-
+                    break;
                 case 'inherit':
                     $perm = with(new Permission())
                         ->whereAction($permission)
                         ->whereResourceType($resource)
                         ->get();
-
                     if ($perm !== null) {
                         DB::table('auth_permission_role')
                             ->whereRoleId($role->id)
                             ->whereIn('permission_id', $perm->pluck('id')->toArray())
                             ->delete();
                     }
-                break;
+                    break;
             }
         }
-
         artisan_call('cache:clear');
-
         return redirect()->back()
             ->withInfo('Permissions Processed.');
     }

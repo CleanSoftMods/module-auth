@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Models;
 
 use BeatSwitch\Lock\Callers\Caller as LockCaller;
@@ -19,7 +18,6 @@ class CustomLockDriver implements Driver
     public function getCacheKey()
     {
         $uid = \Auth::check() ? \Auth::id() : 0;
-
         return implode(':', array_merge(['lock', $uid], func_get_args()));
     }
 
@@ -41,10 +39,8 @@ class CustomLockDriver implements Driver
                         ->where('auth_permissionables.caller_id', '=', $caller->getCallerId());
                 })
                 ->get(['auth_permissions.*']);
-
             return $perms ? $perms->toArray() : [];
         });
-
         return empty($permissions) ? $permissions : PermissionFactory::createFromData($permissions);
     }
 
@@ -72,10 +68,8 @@ class CustomLockDriver implements Driver
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-
             $objPerm = DB::table('auth_permissions')->find($id);
         }
-
         // create a subsequent permissionable record
         DB::table('auth_permissionables')->insert([
             'permission_id' => $objPerm->id,
@@ -98,11 +92,9 @@ class CustomLockDriver implements Driver
             ->where('resource_type', $permission->getResourceType())
             ->where('resource_id', $permission->getResourceId())
             ->first(['id']);
-
         DB::table('auth_permissions')
             ->where('id', $permission->id)
             ->delete();
-
         DB::table('auth_permissionables')
             ->where('permission_id', $permission->id)
             ->where('caller_type', $caller->getCallerType())
@@ -122,9 +114,8 @@ class CustomLockDriver implements Driver
     public function hasCallerPermission(LockCaller $caller, LockPermission $permission)
     {
         $key = $this->getCacheKey(__FUNCTION__, $permission->getType(), $permission->getAction(), $permission->getResourceType(), $permission->getResourceId());
-
         return cache_remember('auth_permissions', $key, 1, function () use ($permission) {
-            return (bool) DB::table('auth_permissions')
+            return (bool)DB::table('auth_permissions')
                 ->where('type', $permission->getType())
                 ->where('action', $permission->getAction())
                 ->where('resource_type', $permission->getResourceType())
@@ -149,12 +140,9 @@ class CustomLockDriver implements Driver
                 ->join('auth_roles', 'auth_roles.id', '=', 'auth_permission_role.role_id')
                 ->where('auth_roles.name', $role->getRoleName())
                 ->get(['auth_permissions.*']);
-
             return $perms ? $perms->toArray() : [];
         });
-
         //dd($permissions);
-
         return empty($permissions) ? $permissions : PermissionFactory::createFromData($permissions);
     }
 
@@ -167,7 +155,6 @@ class CustomLockDriver implements Driver
      */
     public function storeRolePermission(LockRole $role, LockPermission $permission)
     {
-
         // if permission already exists in this config, use that
         $objPerm = DB::table('auth_permissions')
             ->where('type', $permission->getType())
@@ -184,10 +171,8 @@ class CustomLockDriver implements Driver
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-
             $objPerm = DB::table('auth_permissions')->find($id);
         }
-
         // if role exists, otherwise create it
         $objRole = DB::table('auth_roles')->where('name', $role->getRoleName())->first();
         if ($objRole === null) {
@@ -195,12 +180,10 @@ class CustomLockDriver implements Driver
                 'name' => $role->getRoleName(),
             ]);
         }
-
         DB::table('auth_permission_role')->insert([
             'permission_id' => $objPerm->id,
             'role_id' => $objRole->id,
         ]);
-
         // clear this cache tag
         cache_flush('auth_permissions');
     }
@@ -219,25 +202,20 @@ class CustomLockDriver implements Driver
             ->where('resource_type', $permission->getResourceType())
             ->where('resource_id', $permission->getResourceId())
             ->first(['id']);
-
         DB::table('auth_roles')
-          ->where('name', $role->getRoleName())
-          ->delete();
-
+            ->where('name', $role->getRoleName())
+            ->delete();
         if (!empty($dbPermission)) {
             DB::table('auth_permissions')
                 ->where('id', $dbPermission->id)
                 ->delete();
-
             DB::table('auth_permissionables')
                 ->where('permission_id', $dbPermission->id)
                 ->delete();
-
             DB::table('auth_permission_role')
                 ->where('permission_id', $dbPermission->id)
                 ->delete();
         }
-
         // clear this cache tag
         cache_flush('auth_permissions');
     }
@@ -253,9 +231,8 @@ class CustomLockDriver implements Driver
     public function hasRolePermission(LockRole $role, LockPermission $permission)
     {
         $key = $this->getCacheKey(__FUNCTION__, $role->getRoleName(), $permission->getType(), $permission->getAction(), $permission->getResourceType(), $permission->getResourceId());
-
         $permissionForRole = cache_remember('auth_permissions', $key, 1, function () use ($role, $permission) {
-            return (bool) DB::table('auth_permissions')
+            return (bool)DB::table('auth_permissions')
                 ->join('auth_permission_role', 'auth_permissions.id', '=', 'auth_permission_role.permission_id')
                 ->join('auth_roles', 'auth_roles.id', '=', 'auth_permission_role.role_id')
                 ->where('auth_roles.name', $role->getRoleName())
@@ -265,7 +242,6 @@ class CustomLockDriver implements Driver
                 ->where('auth_permissions.resource_id', $permission->getResourceId())
                 ->first();
         });
-
         return $permissionForRole;
     }
 }

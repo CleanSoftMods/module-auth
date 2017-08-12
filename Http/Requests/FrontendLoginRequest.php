@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Requests;
 
 use Cms\Http\Requests\Request;
@@ -29,12 +28,10 @@ class FrontendLoginRequest extends Request
             'email' => 'required|email',
             'password' => 'required',
         ];
-
         // if we wanted it there, enforce it
         if ($this->needRecaptcha()) {
             $rules['g-recaptcha-response'] = 'required|recaptcha';
         }
-
         return $rules;
     }
 
@@ -46,7 +43,6 @@ class FrontendLoginRequest extends Request
         if (in_array(null, $recaptcha)) {
             $setting = 'false';
         }
-
         return $setting === 'true';
     }
 }

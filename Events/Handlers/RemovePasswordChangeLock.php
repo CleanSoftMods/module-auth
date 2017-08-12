@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Events\Handlers;
 
 use Cms\Modules\Auth\Events\UserPasswordWasChanged;
@@ -19,14 +18,12 @@ class RemovePasswordChangeLock
         if ($user === null) {
             return;
         }
-
         // update expiry timer
         $user->pass_expires_on = Carbon::now()->addSeconds(config('cms.auth.config.users.password_age'));
         if (!$user->save()) {
             return redirect()->back()
                 ->withErrors($user->getErrors());
         }
-
         // remove the lock
         Session::forget('actions.reset_pass');
     }

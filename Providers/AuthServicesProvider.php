@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -17,7 +16,6 @@ class AuthServicesProvider extends ServiceProvider
                 'cms.admin.admin.services_views',
                 array_merge(config('cms.admin.admin.services_views'), ['auth::admin.config.partials.recaptcha'])
             );
-
             $this->app->register('Greggilbert\Recaptcha\RecaptchaServiceProvider');
         }
     }

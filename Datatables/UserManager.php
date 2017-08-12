@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Datatables;
 
 use Lock;
@@ -27,7 +26,6 @@ class UserManager
                     ],
                 ],
             ],
-
             /*
              * Set up some table options, these will be passed back to the view
              */
@@ -41,11 +39,9 @@ class UserManager
                 'source' => 'admin.user.manager',
                 'collection' => function () {
                     $model = config('cms.auth.config.user_model');
-
                     return $model::with('roles')->get();
                 },
             ],
-
             /*
              * Lists the tables columns
              */
@@ -80,12 +76,10 @@ class UserManager
                     'th' => 'Roles',
                     'tr' => function ($model) {
                         $roles = null;
-
                         $tpl = '<span class="label label-default" style="background-color: %s;">%s</span>&nbsp;';
                         foreach ($model->roles as $role) {
                             $roles .= sprintf($tpl, $role->color, $role->name);
                         }
-
                         return $roles;
                     },
                     'searchable' => false,
@@ -127,7 +121,6 @@ class UserManager
                     'th' => 'Actions',
                     'tr' => function ($model) {
                         $return = [];
-
                         if (Lock::can('manage.read', 'auth_user')) {
                             $return[] = [
                                 'btn-title' => 'View User',
@@ -136,7 +129,6 @@ class UserManager
                                 'btn-icon' => 'fa fa-file-text-o',
                             ];
                         }
-
                         if (Lock::can('manage.update', 'auth_user')) {
                             $return[] = [
                                 'btn-title' => 'Edit',
@@ -145,7 +137,6 @@ class UserManager
                                 'btn-icon' => 'fa fa-pencil',
                             ];
                         }
-
                         return $return;
                     },
                 ],

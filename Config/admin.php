@@ -1,5 +1,4 @@
 <?php
-
 return [
     'permission_manage' => [
         'auth_user',
@@ -7,7 +6,6 @@ return [
         'auth_permission',
         'auth_config',
     ],
-
     /*
      * These will be loaded on /{backend}/config/cache
      */

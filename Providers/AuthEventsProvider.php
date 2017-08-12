@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Providers;
 
 use Cms\Modules\Core\Providers\BaseEventsProvider;
@@ -23,26 +22,22 @@ class AuthEventsProvider extends BaseEventsProvider
             'Cms\Modules\Auth\Events\Handlers\CheckForEmptyEmail',
             'Cms\Modules\Auth\Events\Handlers\UpdateLastLogin',
         ],
-
         /*
          * AuthController@postRegister
          */
         'Cms\Modules\Auth\Events\UserIsRegistering' => [
         ],
-
         /*
          * AuthController@postRegister
          */
         'Cms\Modules\Auth\Events\UserHasRegistered' => [
         ],
-
         /*
          * SecurityController@postRegister
          */
         'Cms\Modules\Auth\Events\UserPasswordWasChanged' => [
             'Cms\Modules\Auth\Events\Handlers\RemovePasswordChangeLock',
         ],
-
         'Cms\Modules\Admin\Events\GotDatatableConfig' => [
             'Cms\Modules\Auth\Events\Handlers\ManipulateUserPermissionsDatatable',
             'Cms\Modules\Auth\Events\Handlers\ManipulateUserApiKeyDatatable',
@@ -56,7 +51,6 @@ class AuthEventsProvider extends BaseEventsProvider
      * @var array
      */
     protected $subscribe = [
-
     ];
 
     /**
@@ -65,16 +59,14 @@ class AuthEventsProvider extends BaseEventsProvider
     public function boot()
     {
         parent::boot();
-
         // clear acp badge caches
         $models = [
             'User', 'Role', 'ApiKey',
         ];
-
         foreach ($models as $model) {
-            $path = 'Cms\\Modules\\Auth\\Models\\'.$model;
+            $path = 'Cms\\Modules\\Auth\\Models\\' . $model;
             $path::saved(function () use ($model) {
-                \Cache::forget('sidebar.auth.'.strtolower($model).'.count');
+                \Cache::forget('sidebar.auth.' . strtolower($model) . '.count');
             });
         }
     }

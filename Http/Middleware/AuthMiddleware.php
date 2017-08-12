@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Middleware;
 
 use Closure;
@@ -28,13 +27,12 @@ class AuthMiddleware
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-
         // if they arent logged in... redirect em out
         if ($this->auth->guest()) {
             if ($request->ajax()) {
@@ -43,7 +41,6 @@ class AuthMiddleware
                 return redirect()->guest(route('pxcms.user.login'));
             }
         }
-
         return $next($request);
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Auth\Datatables;
-
 class RoleManager
 {
     public function boot()
@@ -25,7 +23,6 @@ class RoleManager
                 //    ],
                 //],
             ],
-
             /*
              * Set up some table options, these will be passed back to the view
              */
@@ -38,11 +35,9 @@ class RoleManager
                 'source' => 'admin.role.manager',
                 'collection' => function () {
                     $model = 'Cms\Modules\Auth\Models\Role';
-
                     return $model::with('users')->get();
                 },
             ],
-
             /*
              * Lists the tables columns
              */
@@ -97,7 +92,6 @@ class RoleManager
                         if (\Lock::cannot('manage.update', 'auth_role')) {
                             return [];
                         }
-
                         return [
                             [
                                 'btn-title' => 'Edit',

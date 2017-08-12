@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Events;
 
 use Illuminate\Queue\SerializesModels;

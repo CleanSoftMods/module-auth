@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Providers;
 
 use Illuminate\Http\Request;
@@ -22,22 +21,18 @@ class ApiAuthenticationProvider implements Provider
     {
         $apiKey = $this->getAuthToken($request);
         $keyRow = with(new ApiKey())->keyExists($apiKey);
-
         if (!($keyRow instanceof ApiKey)) {
             throw new UnauthorizedHttpException('AuthToken', 'Invalid authentication credentials.');
         }
-
         return $this->auth->guard()->loginUsingId($keyRow->user_id);
     }
 
     protected function getAuthToken($request)
     {
         $token = $request->header('X-Auth-Token');
-
         if (empty($token)) {
             $token = $request->input('auth_token');
         }
-
         return $token;
     }
 

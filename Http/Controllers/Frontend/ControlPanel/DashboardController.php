@@ -1,14 +1,11 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Frontend\ControlPanel;
-
 class DashboardController extends BaseController
 {
     public function getIndex()
     {
         $data = $this->getUserDetails();
         $this->theme->breadcrumb()->add('Dashboard', '#');
-
         return $this->setView('controlpanel.dashboard', [
             'user' => \Auth::user()->transform(),
         ]);

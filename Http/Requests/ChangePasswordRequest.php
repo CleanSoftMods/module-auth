@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Requests;
 
 use Cms\Http\Requests\Request;
@@ -29,13 +28,11 @@ class ChangePasswordRequest extends Request
             'new_password' => 'required_with:old_password|confirmed|min:8',
             'new_password_confirmation' => 'required_with:old_password,new_password',
         ];
-
         // if we wanted secure passwords...
         if (config('cms.auth.users.login.force_password', 'false') === 'true') {
             $rules['new_password'] .= '|regex:^(?=\d*)(?=[a-z]*)(?=[A-Z]*)(?=[\W]*).{8,}';
             $rules['new_password_confirmation'] .= '|regex:^(?=\d*)(?=[a-z]*)(?=[A-Z]*)(?=[\W]*).{8,}';
         }
-
         return $rules;
     }
 }

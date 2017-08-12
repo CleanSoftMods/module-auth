@@ -2,6 +2,6 @@
 
 @section('control-form')
 
-{!! \Debug::dump($user) !!}
+  {!! \Debug::dump($user) !!}
 
 @stop

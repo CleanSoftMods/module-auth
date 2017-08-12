@@ -1,5 +1,4 @@
 <?php
-
 return [
     'table-prefix' => 'auth_',
     'user_model' => \Cms\Modules\Auth\Models\User::class,

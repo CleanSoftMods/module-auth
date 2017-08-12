@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Frontend\ControlPanel;
 
 use Cms\Modules\Core\Http\Controllers\BaseFrontendController;
@@ -10,7 +9,6 @@ class BaseController extends BaseFrontendController
     public function boot()
     {
         parent::boot();
-
         $this->setLayout('1-column');
     }
 
@@ -20,7 +18,6 @@ class BaseController extends BaseFrontendController
         Former::populate($user);
         $this->theme->setTitle('Your Control Panel');
         $this->theme->breadcrumb()->add('Your Control Panel', route('pxcms.user.dashboard'));
-
         return compact('user');
     }
 }

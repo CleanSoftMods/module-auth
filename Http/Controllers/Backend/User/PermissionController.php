@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Backend\User;
 
 use Cms\Modules\Auth\Datatables\PermissionManager;
@@ -14,7 +13,6 @@ class PermissionController extends BaseUserController
     {
         $this->getUserDetails($user);
         $this->theme->breadcrumb()->add('Permissions', route('admin.user.permissions', $user->id));
-
         return $this->renderDataTable(with(new PermissionManager())->boot());
     }
 

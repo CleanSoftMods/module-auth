@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Repositories\Role;
 
 use Cms\Modules\Core\Repositories\BaseEloquentRepository;

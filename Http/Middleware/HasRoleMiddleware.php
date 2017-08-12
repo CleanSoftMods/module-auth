@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Middleware;
 
 use Closure;
@@ -11,7 +10,7 @@ class HasRoleMiddleware
      * Check if user is in group/groups.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -19,22 +18,17 @@ class HasRoleMiddleware
     {
         // grab the action
         $actions = $request->route()->getAction();
-
         // make sure we have something to work with
         if (array_get($actions, 'hasRole', null) === null) {
             \Debug::console('There is a route with `hasRole` middleware attached, but no roles defined in the `hasRole` action.');
-
             return $next($request);
         }
-
         $roles = array_get($actions, 'hasRole');
         if (!is_array($roles)) {
             $roles = [$roles];
         }
-
         // get the user
         $user = Auth::user();
-
         // roll over each role and see if the user has it
         foreach ($roles as $role) {
             // only needs to have 1 missing and access is denied
@@ -43,7 +37,6 @@ class HasRoleMiddleware
                     ->with('error', trans('auth::auth.permissions.unauthorized'));
             }
         }
-
         return $next($request);
     }
 }

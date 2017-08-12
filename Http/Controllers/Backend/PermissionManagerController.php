@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Backend;
 
 use Cms\Modules\Core\Http\Controllers\BaseBackendController;

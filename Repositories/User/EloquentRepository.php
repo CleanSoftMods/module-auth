@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Repositories\User;
 
 use Cms\Modules\Auth\Events\UserPasswordWasChanged;
@@ -21,23 +20,20 @@ class EloquentRepository extends BaseEloquentRepository implements UserRepositor
      *
      * @param array $data
      * @param array $roles
-     * @param bool  $verified
+     * @param bool $verified
      */
     public function createWithRoles($data, $roles, $verified = false)
     {
         if ($verified === true) {
             $data['verified_at'] = \Carbon\Carbon::now();
         }
-
         $user = $this->create($data);
         if ($user === null) {
             return false;
         }
-
         if (!empty($roles) && !is_array($roles)) {
             $roles = [$roles];
         }
-
         if (!empty($roles) && is_array($roles)) {
             foreach ($roles as $roleId) {
                 $user->roles()->attach(
@@ -46,7 +42,6 @@ class EloquentRepository extends BaseEloquentRepository implements UserRepositor
                 );
             }
         }
-
         return $user;
     }
 
@@ -96,11 +91,9 @@ class EloquentRepository extends BaseEloquentRepository implements UserRepositor
                 'old_password' => 'Cant find user?',
             ];
         }
-
         $oldPass = $input->get('old_password', null);
         $newPass = $input->get('new_password', null);
         $newPassConfirm = $input->get('new_password_confirmation', null);
-
         // check the new passwords match first
         if (md5($newPass) !== md5($newPassConfirm)) {
             return [
@@ -108,7 +101,6 @@ class EloquentRepository extends BaseEloquentRepository implements UserRepositor
                 'new_password_confirmation' => 'Passwords do not match',
             ];
         }
-
         // make sure the old & new passwords dont match
         if (md5($newPass) === md5($oldPass)) {
             return [
@@ -116,25 +108,20 @@ class EloquentRepository extends BaseEloquentRepository implements UserRepositor
                 'new_password' => 'Old & New Password can\'t match',
             ];
         }
-
         // make sure its valid against current users password
         if (!Hash::check($oldPass, $user->password)) {
             return [
                 'old_password' => 'Old password doesnt match one on file.',
             ];
         }
-
         // if all checks out, change the users password to the new one
         // password auto gets run through bcrypt() via the model attributes
         $user->hydrateFromInput(['password' => $newPass]);
-
         // make sure we can save
         if ($user->save() === false) {
             return $user->getErrors();
         }
-
         event(new UserPasswordWasChanged($user));
-
         return true;
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Auth\Repositories\User;
-
 /**
  * Interface UserRepository.
  */
@@ -12,7 +10,7 @@ interface RepositoryInterface
      *
      * @param array $data
      * @param array $roles
-     * @param bool  $activated
+     * @param bool $activated
      */
     public function createWithRoles($data, $roles, $activated = false);
 

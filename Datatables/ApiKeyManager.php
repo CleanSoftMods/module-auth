@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Datatables;
 
 use Illuminate\Support\Collection;
@@ -24,7 +23,6 @@ class ApiKeyManager
                     ],
                 ],
             ],
-
             /*
              * Set up some table options, these will be passed back to the view
              */
@@ -37,11 +35,9 @@ class ApiKeyManager
                 'source' => 'admin.apikey.manager',
                 'collection' => function () {
                     $model = 'Cms\Modules\Auth\Models\ApiKey';
-
                     return $model::all();
                 },
             ],
-
             /*
              * Lists the tables columns
              */
@@ -55,7 +51,6 @@ class ApiKeyManager
                     'searchable' => true,
                     'width' => '10%',
                 ],
-
                 'active' => [
                     'th' => 'Active',
                     'tr' => function ($model) {
@@ -65,7 +60,6 @@ class ApiKeyManager
                     },
                     'width' => '10%',
                 ],
-
                 'key' => [
                     'th' => 'Key',
                     'tr' => function ($model) {
@@ -73,7 +67,6 @@ class ApiKeyManager
                     },
                     'width' => '10%',
                 ],
-
                 'description' => [
                     'th' => 'Description',
                     'tr' => function ($model) {
@@ -81,7 +74,6 @@ class ApiKeyManager
                     },
                     'width' => '25%',
                 ],
-
                 'created_at' => [
                     'th' => 'Created',
                     'tr' => function ($model) {
@@ -91,7 +83,6 @@ class ApiKeyManager
                     'tr-class' => 'hidden-xs hidden-sm',
                     'width' => '15%',
                 ],
-
                 'expires_at' => [
                     'th' => 'Expiry Date',
                     'tr' => function ($model) {
@@ -101,7 +92,6 @@ class ApiKeyManager
                     'tr-class' => 'hidden-xs hidden-sm',
                     'width' => '15%',
                 ],
-
                 'actions' => [
                     'th' => 'Actions',
                     'tr' => function ($model) {
@@ -112,7 +102,7 @@ class ApiKeyManager
                                 'btn-class' => 'btn btn-danger btn-xs btn-labeled',
                                 'btn-icon' => 'fa fa-times',
                                 'btn-method' => 'delete',
-                                'btn-extras' => 'data-remote="true" data-confirm="Are you sure you want to delete entry #'.$model->id.'?" data-disable-with="<i class=\'fa fa-refresh fa-spin\'></i>"',
+                                'btn-extras' => 'data-remote="true" data-confirm="Are you sure you want to delete entry #' . $model->id . '?" data-disable-with="<i class=\'fa fa-refresh fa-spin\'></i>"',
                                 'hasPermission' => 'apikey.delete@auth_user',
                             ],
                         ];

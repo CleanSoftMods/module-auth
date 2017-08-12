@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Requests;
 
 use Cms\Http\Requests\Request;
@@ -26,9 +25,8 @@ class BackendCreateUserRequest extends Request
     {
         $tblPrefix = config('cms.auth.table-prefix', 'auth_');
         $usernameValidation = config('cms.auth.config.users.username_validator', '\w+');
-
         return [
-            'username' => 'required|unique:'.$tblPrefix.'users,username|regex:/^'.$usernameValidation.'$/',
+            'username' => 'required|unique:' . $tblPrefix . 'users,username|regex:/^' . $usernameValidation . '$/',
             'name' => 'required',
             'email' => 'required',
         ];

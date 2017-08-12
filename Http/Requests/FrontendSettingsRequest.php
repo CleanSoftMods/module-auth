@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Requests;
 
 use Auth;
@@ -27,12 +26,11 @@ class FrontendSettingsRequest extends Request
     {
         $user_id = Auth::id();
         $tblPrefix = config('cms.auth.table-prefix', 'auth_');
-
         return [
-            'username' => ['required', Rule::unique($tblPrefix.'users')->ignore($user_id)],
+            'username' => ['required', Rule::unique($tblPrefix . 'users')->ignore($user_id)],
             'name' => 'required',
             'use_nick' => 'in:0,1',
-            'email' => ['required', 'email', Rule::unique($tblPrefix.'users')->ignore($user_id)],
+            'email' => ['required', 'email', Rule::unique($tblPrefix . 'users')->ignore($user_id)],
         ];
     }
 }

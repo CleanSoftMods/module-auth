@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Backend\Api;
 
 use Cms\Modules\Core\Http\Controllers\BaseBackendController;
@@ -11,7 +10,6 @@ class BaseApiController extends BaseBackendController
     public function boot()
     {
         parent::boot();
-
         $this->theme->setTitle('ApiKey Manager');
         $this->theme->breadcrumb()->add('ApiKey Manager', route('admin.apikey.manager'));
     }
@@ -20,7 +18,6 @@ class BaseApiController extends BaseBackendController
     {
         Former::populate($ApiKey);
         $this->theme->setTitle('ApiKey Manager');
-
         return compact('ApiKey');
     }
 }

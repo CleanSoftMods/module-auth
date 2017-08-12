@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Models;
 
 use BeatSwitch\Lock\Callers\Caller;
@@ -16,7 +15,7 @@ class Role extends BaseModel implements Caller
 
     public function permissions()
     {
-        return $this->belongsToMany(__NAMESPACE__.'\Permission', 'auth_permission_role', 'role_id', 'permission_id');
+        return $this->belongsToMany(__NAMESPACE__ . '\Permission', 'auth_permission_role', 'role_id', 'permission_id');
     }
 
     public function getUserCountAttribute()
@@ -32,11 +31,9 @@ class Role extends BaseModel implements Caller
     public function hasPermission($id)
     {
         $perm = $this->permissions->find($id);
-
         if ($perm !== null) {
             return true;
         }
-
         return false;
     }
 
@@ -45,7 +42,6 @@ class Role extends BaseModel implements Caller
         if ($this->hasPermission($id)) {
             return $this->permissions->find($id)->$key;
         }
-
         return false;
     }
 

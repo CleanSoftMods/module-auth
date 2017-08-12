@@ -1,7 +1,5 @@
 <?php
-
 namespace Cms\Modules\Auth\Models;
-
 class Permission extends BaseModel
 {
     protected $table = 'permissions';
@@ -9,7 +7,7 @@ class Permission extends BaseModel
 
     public function roles()
     {
-        return $this->belongsToMany(__NAMESPACE__.'\Role', 'auth_permission_role');
+        return $this->belongsToMany(__NAMESPACE__ . '\Role', 'auth_permission_role');
     }
 
     public function users()

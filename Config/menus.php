@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     'backend_sidebar' => [
         'User Management' => [
             'children' => [
@@ -35,7 +33,6 @@ return [
             ],
         ],
     ],
-
     'backend_config_menu' => [
         [
             'route' => 'admin.config.users',
@@ -59,7 +56,6 @@ return [
             'permission' => 'users@auth_config',
         ],
     ],
-
     'backend_user_menu' => [
         [
             'route' => ['admin.user.edit', ['auth_user_id' => 'segment:3']],
@@ -104,7 +100,6 @@ return [
             'permission' => 'apikey@auth_user',
         ],
     ],
-
     'backend_role_menu' => [
         [
             'route' => ['admin.role.edit', ['auth_role_id' => 'segment:3']],
@@ -128,7 +123,6 @@ return [
             'permission' => 'manage.update@auth_role',
         ],
     ],
-
     'frontend_user_controlpanel' => [
         [
             'route' => 'pxcms.user.dashboard',

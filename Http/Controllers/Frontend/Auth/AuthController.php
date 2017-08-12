@@ -1,5 +1,4 @@
 <?php
-
 namespace Cms\Modules\Auth\Http\Controllers\Frontend\Auth;
 
 use Cms\Modules\Auth\Http\Requests\ChangePasswordRequest;
@@ -43,7 +42,6 @@ class AuthController extends BaseFrontendController
             app('Teepluss\Theme\Contracts\Theme'),
             app('Illuminate\Filesystem\Filesystem')
         );
-
         $this->lockoutTime = config('cms.auth.config.users.login.lockoutTime', 60);
         $this->maxLoginAttempts = config('cms.auth.config.users.login.maxLoginAttempts', 5);
     }
@@ -54,7 +52,6 @@ class AuthController extends BaseFrontendController
     public function getLogin()
     {
         $this->setLayout('1-column');
-
         return $this->setView('partials.core.login', [], 'theme');
     }
 
@@ -63,32 +60,25 @@ class AuthController extends BaseFrontendController
      */
     public function postLogin(FrontendLoginRequest $request)
     {
-
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         $throttles = ($this->isUsingThrottlesLoginsTrait() && config('cms.auth.config.users.login.throttlingEnabled', 'false') === 'true');
-
         if ($throttles && $this->hasTooManyLoginAttempts($request)) {
             event(new \Cms\Modules\Auth\Events\NotifyUser(Auth::id(), 'auth::notify.account.lockout'));
-
             return $this->sendLockoutResponse($request);
         }
-
         // grab the credentials, and use them to attempt an auth
         if ($this->attemptLogin($request)) {
             $events = event(new \Cms\Modules\Auth\Events\UserHasLoggedIn(Auth::id()));
-
             return redirect()->intended(route(config('cms.auth.paths.redirect_login', 'pxcms.pages.home')));
         }
-
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         if ($throttles) {
             $this->incrementLoginAttempts($request);
         }
-
         return redirect()->back()
             ->withInput($request->only('email', 'remember'))
             ->withErrors([
@@ -103,7 +93,6 @@ class AuthController extends BaseFrontendController
     {
         $this->auth->logout();
         \Session::flush();
-
         return redirect(route(config('cms.auth.paths.redirect_logout', 'pxcms.pages.home')))
             ->withInfo(trans('auth::auth.user.logged_out_successfully'));
     }
@@ -111,7 +100,6 @@ class AuthController extends BaseFrontendController
     public function get2fa()
     {
         $this->setLayout('1-column');
-
         return $this->setView('partials.core.2fa', [], 'theme');
     }
 
@@ -119,17 +107,14 @@ class AuthController extends BaseFrontendController
     {
         $secret = $input->get('verify_2fa');
         $user = Auth::user();
-
         $valid = $google2fa->verifyKey($user->secret_2fa, $secret);
         if ($valid === false) {
             return redirect()->back()->withErrors([
                 'verify_2fa' => trans('auth::auth.user.2fa_code_error'),
             ]);
         }
-
         // the key was valid, forget about 2fa now
         Session::forget('actions.require_2fa');
-
         return redirect(route(config('cms.auth.paths.redirect_logout', 'pxcms.pages.home')))
             ->withInfo(trans('auth::auth.user.2fa_thanks'));
     }
@@ -140,7 +125,6 @@ class AuthController extends BaseFrontendController
     public function getRegister()
     {
         $this->setLayout('1-column');
-
         return $this->setView('partials.core.register', [], 'theme');
     }
 
@@ -158,22 +142,18 @@ class AuthController extends BaseFrontendController
     public function postRegister(FrontendRegisterRequest $request)
     {
         event(new \Cms\Modules\Auth\Events\UserIsRegistering($request));
-
         // create the user
         $user = $this->user->createWithRoles(
             $request->all(),
             config('cms.auth.config.roles.user_group'),
             config('cms.auth.config.users.require_activating', false)
         );
-
         event(new \Cms\Modules\Auth\Events\UserHasRegistered($user->id));
-
         // if the user requires activating, then dont log them in automatically
         if (config('cms.auth.config.users.require_activating', false) === false) {
             $this->auth->login($user);
             event(new \Cms\Modules\Auth\Events\UserHasLoggedIn($user->id));
         }
-
         // redirect them back
         return redirect(route(config('cms.auth.config.paths.redirect_register', 'pxcms.pages.home')))
             ->withInfo(trans('auth::auth.user.registered'));
@@ -182,7 +162,6 @@ class AuthController extends BaseFrontendController
     public function getPassExpired()
     {
         $this->setLayout('1-column');
-
         return $this->setView('controlpanel.partials.change_password', []);
     }
 
@@ -194,7 +173,6 @@ class AuthController extends BaseFrontendController
             return redirect()->back()
                 ->withErrors($return);
         }
-
         // redirect home!
         return redirect()->to('/')
             ->withInfo(trans('auth::auth.user.password_changed'));
@@ -218,7 +196,7 @@ class AuthController extends BaseFrontendController
     protected function isUsingThrottlesLoginsTrait()
     {
         return in_array(
-           ThrottlesLogins::class, class_uses_recursive(get_class($this))
-       );
+            ThrottlesLogins::class, class_uses_recursive(get_class($this))
+        );
     }
 }
